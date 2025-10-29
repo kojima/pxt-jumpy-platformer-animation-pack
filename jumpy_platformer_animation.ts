@@ -24,7 +24,7 @@ namespace jumpy_platformer_animation {
     /**
      * スプライトのアニメーションを設定する
      */
-    //% block="`アニメーションを設定する スプライト $sprite=variables_get(mySprite) アイドル右 $idleRight=animation_editor アイドル左 $idleLeft=animation_editor 間隔(ms) $idleInterval=timePicker 移動右 $runRight=animation_editor 移動左 $runLeft=animation_editor 間隔(ms) $runInterval=timePicker ジャンプ右 $jumpRight=screen_image_picker ジャンプ左 $jumpLeft=screen_image_picker"
+    //% block="アニメーションを設定する スプライト $sprite=variables_get(mySprite) アイドル右 $idleRight=animation_editor アイドル左 $idleLeft=animation_editor 間隔(ms) $idleInterval=timePicker 移動右 $runRight=animation_editor 移動左 $runLeft=animation_editor 間隔(ms) $runInterval=timePicker ジャンプ右 $jumpRight=screen_image_picker ジャンプ左 $jumpLeft=screen_image_picker"
     //% weight=100
     export function setSpriteAnimations(
         sprite: Sprite,
@@ -40,10 +40,11 @@ namespace jumpy_platformer_animation {
             spriteDicts = game.currentScene().data[dataKey] = {}
         }
 
-        const data: AnimationData =
-            spriteDicts[sprite.id]
-            ? spriteDicts[sprite.id]
-            : {direction: SpriteDirection.RIGHT, state: SpriteState.IDLE}
+        let data: AnimationData = spriteDicts[sprite.id]
+        if (!data) {
+            data = { direction: SpriteDirection.RIGHT, state: SpriteState.IDLE }
+            animation.runImageAnimation(sprite, idleRight, idleInterval, true)
+        }
         game.eventContext().registerFrameHandler(scene.ANIMATION_UPDATE_PRIORITY, () => {
             const direction = data.direction
             const state = data.state
