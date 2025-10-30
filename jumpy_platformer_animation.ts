@@ -25,8 +25,8 @@ namespace jumpy_platformer_animation {
         const res: Image[] = []
         frame.forEach((image) => {
             const i = image.clone()
-            if (sprite.ay < 0) image.flipY()
-            res.push(image)
+            if (sprite.ay < 0) i.flipY()
+            res.push(i)
         })
         return res
     }
