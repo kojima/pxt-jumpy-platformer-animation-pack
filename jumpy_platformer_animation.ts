@@ -21,6 +21,15 @@ namespace jumpy_platformer_animation {
         state: SpriteState
     }
 
+    function getFrame(sprite: Sprite, frame: Image[]) {
+        const res: Image[] = []
+        frame.forEach((image) => {
+            if (sprite.ay < 0) image.flipY()
+            res.push(image)
+        })
+        return res
+    }
+
     /**
      * スプライトのアニメーションを設定する
      */
@@ -65,28 +74,22 @@ namespace jumpy_platformer_animation {
                 data.state = SpriteState.JUMP
             } else if (Math.abs(sprite.vx) > 0) {   // running
                 if (sprite.vx > 0 && (direction !== SpriteDirection.RIGHT || state !== SpriteState.RUN)) {
-                    animation.runImageAnimation(
-                        sprite,
-                        runRight,
-                        runInterval,
-                        true
-                    )
+                    const frame = getFrame(sprite, runRight)
+                    animation.runImageAnimation(sprite, frame, runInterval, true)
                     data.direction = SpriteDirection.RIGHT
                 } else if (sprite.vx < 0 && (direction !== SpriteDirection.LEFT || state !== SpriteState.RUN)) {
-                    animation.runImageAnimation(
-                        sprite,
-                        runLeft,
-                        runInterval,
-                        true
-                    )
+                    const frame = getFrame(sprite, runLeft)
+                    animation.runImageAnimation(sprite, frame, runInterval, true)
                     data.direction = SpriteDirection.LEFT
                 }
                 data.state = SpriteState.RUN
             } else if (state !== SpriteState.IDLE && sprite.isHittingTile(CollisionDirection.Bottom)) {  // idle
                 if (direction === SpriteDirection.RIGHT) {
-                    animation.runImageAnimation(sprite, idleRight, idleInterval, true)
+                    const frame = getFrame(sprite, idleRight)
+                    animation.runImageAnimation(sprite, frame, idleInterval, true)
                 } else {
-                    animation.runImageAnimation(sprite, idleLeft, idleInterval, true)
+                    const frame = getFrame(sprite, idleLeft)
+                    animation.runImageAnimation(sprite, frame, idleInterval, true)
                 }
                 data.state = SpriteState.IDLE
             }
