@@ -67,11 +67,13 @@ namespace jumpy_platformer_animation {
                     data.direction = SpriteDirection.LEFT
                 }
                 if (data.direction === SpriteDirection.RIGHT) {
-                    if (sprite.ay < 0) jumpRight.flipY()
-                    sprite.setImage(jumpRight)
+                    const image = jumpRight.clone()
+                    if (sprite.ay < 0) image.flipY()
+                    sprite.setImage(image)
                 } else if (data.direction === SpriteDirection.LEFT) {
-                    if (sprite.ay < 0) jumpLeft.flipY()
-                    sprite.setImage(jumpLeft)
+                    const image = jumpLeft.clone()
+                    if (sprite.ay < 0) image.flipY()
+                    sprite.setImage(image)
                 }
                 data.state = SpriteState.JUMP
             } else if (Math.abs(sprite.vx) > 0) {   // running
