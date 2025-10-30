@@ -67,8 +67,10 @@ namespace jumpy_platformer_animation {
                     data.direction = SpriteDirection.LEFT
                 }
                 if (data.direction === SpriteDirection.RIGHT) {
+                    if (sprite.ay < 0) jumpRight.flipY()
                     sprite.setImage(jumpRight)
                 } else if (data.direction === SpriteDirection.LEFT) {
+                    if (sprite.ay < 0) jumpLeft.flipY()
                     sprite.setImage(jumpLeft)
                 }
                 data.state = SpriteState.JUMP
@@ -83,15 +85,20 @@ namespace jumpy_platformer_animation {
                     data.direction = SpriteDirection.LEFT
                 }
                 data.state = SpriteState.RUN
-            } else if (state !== SpriteState.IDLE && sprite.isHittingTile(CollisionDirection.Bottom)) {  // idle
-                if (direction === SpriteDirection.RIGHT) {
-                    const frame = getFrame(sprite, idleRight)
-                    animation.runImageAnimation(sprite, frame, idleInterval, true)
-                } else {
-                    const frame = getFrame(sprite, idleLeft)
-                    animation.runImageAnimation(sprite, frame, idleInterval, true)
+            } else if (state !== SpriteState.IDLE) {
+                const hitGround = sprite.ay > 0
+                    ? sprite.isHittingTile(CollisionDirection.Bottom)
+                    : sprite.isHittingTile(CollisionDirection.Top)
+                if (hitGround) {  // idle
+                    if (direction === SpriteDirection.RIGHT) {
+                        const frame = getFrame(sprite, idleRight)
+                        animation.runImageAnimation(sprite, frame, idleInterval, true)
+                    } else {
+                        const frame = getFrame(sprite, idleLeft)
+                        animation.runImageAnimation(sprite, frame, idleInterval, true)
+                    }
+                    data.state = SpriteState.IDLE
                 }
-                data.state = SpriteState.IDLE
             }
             spriteDicts[sprite.id] = data
         })
