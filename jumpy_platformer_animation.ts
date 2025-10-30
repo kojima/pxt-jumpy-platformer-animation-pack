@@ -24,6 +24,7 @@ namespace jumpy_platformer_animation {
     function getFrame(sprite: Sprite, frame: Image[]) {
         const res: Image[] = []
         frame.forEach((image) => {
+            const i = image.clone()
             if (sprite.ay < 0) image.flipY()
             res.push(image)
         })
@@ -52,7 +53,8 @@ namespace jumpy_platformer_animation {
         let data: AnimationData = spriteDicts[sprite.id]
         if (!data) {
             data = { direction: SpriteDirection.RIGHT, state: SpriteState.IDLE }
-            animation.runImageAnimation(sprite, idleRight, idleInterval, true)
+            const frame = getFrame(sprite, idleRight)
+            animation.runImageAnimation(sprite, frame, idleInterval, true)
         }
         game.eventContext().registerFrameHandler(scene.ANIMATION_UPDATE_PRIORITY, () => {
             const direction = data.direction
